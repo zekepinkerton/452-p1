@@ -180,6 +180,62 @@ void test_notInList(void) {
   free(data); // Free the allocated data
 }
 
+//////////////////////////////
+// Added Tests ///////////////
+//////////////////////////////
+
+void test_add_multiple(void) {
+  list_add(lst_, alloc_data(1)); // Add element 1 to the list
+  list_add(lst_, alloc_data(2)); // Add element 2 to the list
+  list_add(lst_, alloc_data(3)); // Add element 3 to the list
+  TEST_ASSERT_TRUE(lst_->size == 3); // Check if the list size is 3
+  node_t *curr = lst_->head->next;
+  for (int i = 3; i >= 1; i--) {
+    TEST_ASSERT_TRUE(*((int *)curr->data) == i); // Check if the list is 3->2->1
+    curr = curr->next;
+  }
+}
+
+void test_remove_middle(void) {
+  populate_list(); // Populate the list with elements 0 to 4
+  int *rval = (int *)list_remove_index(lst_, 2); // Remove the element at index 2
+  TEST_ASSERT_TRUE(lst_->size == 4); // Check if the list size is 4
+  TEST_ASSERT_TRUE(*rval == 2); // Check if the removed value is 2
+  free(rval); // Free the removed value
+  node_t *curr = lst_->head->next;
+  for (int i = 4; i >= 0; i--) {
+    if (i == 2) continue; // Skip the removed element
+    TEST_ASSERT_TRUE(*((int *)curr->data) == i); // Check the remaining elements
+    curr = curr->next;
+  }
+}
+
+void test_remove_last(void) {
+  populate_list(); // Populate the list with elements 0 to 4
+  int *rval = (int *)list_remove_index(lst_, 4); // Remove the last element
+  TEST_ASSERT_TRUE(lst_->size == 4); // Check if the list size is 4
+  TEST_ASSERT_TRUE(*rval == 0); // Check if the removed value is 0
+  free(rval); // Free the removed value
+  node_t *curr = lst_->head->next;
+  for (int i = 4; i > 0; i--) {
+    TEST_ASSERT_TRUE(*((int *)curr->data) == i); // Check the remaining elements
+    curr = curr->next;
+  }
+}
+
+void test_remove_first(void) {
+  populate_list(); // Populate the list with elements 0 to 4
+  int *rval = (int *)list_remove_index(lst_, 0); // Remove the first element
+  TEST_ASSERT_TRUE(lst_->size == 4); // Check if the list size is 4
+  TEST_ASSERT_TRUE(*rval == 4); // Check if the removed value is 4
+  free(rval); // Free the removed value
+  node_t *curr = lst_->head->next;
+  for (int i = 3; i >= 0; i--) {
+    TEST_ASSERT_TRUE(*((int *)curr->data) == i); // Check the remaining elements
+    curr = curr->next;
+  }
+}
+
 int main(void) {
   UNITY_BEGIN(); // Begin Unity test framework
   RUN_TEST(test_create_destroy); // Run test_create_destroy
@@ -193,5 +249,9 @@ int main(void) {
   RUN_TEST(test_indexOf0); // Run test_indexOf0
   RUN_TEST(test_indexOf3); // Run test_indexOf3
   RUN_TEST(test_notInList); // Run test_notInList
+  RUN_TEST(test_add_multiple); // Run test_add_multiple
+  RUN_TEST(test_remove_middle); // Run test_remove_middle
+  RUN_TEST(test_remove_last); // Run test_remove_last
+  RUN_TEST(test_remove_first); // Run test_remove_first
   return UNITY_END(); // End Unity test framework
 }
