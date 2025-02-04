@@ -83,3 +83,6 @@ int list_indexof(list_t *list, void *data) {
 
     return -1; // Return -1 if data is not found
 }
+
+// NO changes were given from the code review given, one suggestion was to stay more consistent with the use of ! or using null, to keep it the same,
+//but that would change the dynamic of my program. I'll keep that in mind next project I work on. 
